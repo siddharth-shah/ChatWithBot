@@ -1,6 +1,7 @@
 package co.chatbot.view;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.chatbot.AppConstants;
 import co.chatbot.R;
 import co.chatbot.data.models.Message;
 
@@ -68,7 +70,9 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (messages.get(position).getSenderId().equalsIgnoreCase("ajsnsjssjf")) {
+        String currentUser = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(AppConstants.QUERY_PARAM_EXTERNAL_ID, "");
+        if (messages.get(position).getSenderId().equalsIgnoreCase(currentUser)) {
             return MY_MESSAGE;
         } else {
             return OTHERS_MESSAGE;
