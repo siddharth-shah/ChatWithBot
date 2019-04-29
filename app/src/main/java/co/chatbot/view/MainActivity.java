@@ -12,7 +12,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import co.chatbot.AppConstants;
+import co.chatbot.ChatApplication;
 import co.chatbot.R;
+import co.chatbot.data.database.MessageProviderImpl;
 import co.chatbot.data.models.Message;
 import co.chatbot.presenter.ChatPresenter;
 import co.chatbot.presenter.ChatPresenterImpl;
@@ -30,7 +32,9 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        presenter = new ChatPresenterImpl(this);
+        presenter = new ChatPresenterImpl(this,
+                new MessageProviderImpl(((ChatApplication) getApplication())
+                        .getDaoSession().getMessageDao()));
         setupRecyclerView();
         messageEdit = findViewById(R.id.message_edit);
         sendButton = findViewById(R.id.send_message_button);
