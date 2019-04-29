@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import co.chatbot.AppConstants;
 import co.chatbot.data.database.MessageProvider;
+import co.chatbot.data.database.models.Message;
 import co.chatbot.data.models.BotResponse;
 import co.chatbot.data.models.ChatItem;
 import co.chatbot.data.network.ApiClient;
@@ -33,19 +34,19 @@ public class ChatPresenterImpl implements ChatPresenter {
     }
 
     @Override
-    public void sendMessage(final String message, final String senderId, final String botId) {
-        co.chatbot.data.database.models.Message dbMessage = new co.chatbot.data.database.models.Message();
+    public void sendMessage(final String messageText, final String userId, final String botId) {
+        Message dbMessage = new Message();
         dbMessage.setChatBotID(botId);
-        dbMessage.setExternalID(senderId);
-        dbMessage.setMessageText(message);
+        dbMessage.setExternalID(userId);
+        dbMessage.setMessageText(messageText);
         dbMessage.setCreatedAt(new Date().getTime());
-        dbMessage.setSenderID(senderId);
+        dbMessage.setSenderID(userId);
         messageProvider.addMessage(dbMessage);
-        // add current message in the view
-        chatView.addMessage(new ChatItem(message, senderId));
+        // add current messageText in the view
+        chatView.addMessage(new ChatItem(messageText, userId));
         HashMap<String, String> queryMap = new HashMap<>();
-        queryMap.put(AppConstants.QUERY_PARAM_MESSAGE, message);
-        queryMap.put(AppConstants.QUERY_PARAM_EXTERNAL_ID, senderId);
+        queryMap.put(AppConstants.QUERY_PARAM_MESSAGE, messageText);
+        queryMap.put(AppConstants.QUERY_PARAM_EXTERNAL_ID, userId);
         queryMap.put(AppConstants.QUERY_PARAM_CHAT_BOT_ID, botId);
         chatApi.sendMessage(queryMap)
                 .subscribeOn(Schedulers.io())
@@ -64,10 +65,10 @@ public class ChatPresenterImpl implements ChatPresenter {
 
             @Override
             public void onNext(ChatItem chatItem) {
-                co.chatbot.data.database.models.Message dbMessage = new co.chatbot.data.database.models.Message();
+                Message dbMessage = new Message();
 
                 dbMessage.setChatBotID(botId);
-                dbMessage.setExternalID(senderId);
+                dbMessage.setExternalID(userId);
                 dbMessage.setMessageText(chatItem.getMessage());
                 dbMessage.setCreatedAt(new Date().getTime());
                 dbMessage.setSenderID(botId);
