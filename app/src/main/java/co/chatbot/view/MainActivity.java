@@ -4,26 +4,28 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import co.chatbot.R;
 import co.chatbot.data.models.Message;
 
-public class MainActivity extends AppCompatActivity implements ChatView {
+public class MainActivity extends AppCompatActivity implements ChatView, View.OnClickListener {
 
     RecyclerView chatList;
     ChatAdapter chatAdapter;
+    EditText messageEdit;
+    Button sendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupRecyclerView();
-        addMessage(new Message("Hey What's up", "ajsnsjssjf"));
-        addMessage(new Message("I am cool. What's up with you?", "63906"));
-        addMessage(new Message("Cool cool", "ajsnsjssjf"));
-        addMessage(new Message("Did you watch Endgame", "63906"));
-        addMessage(new Message("Yup", "ajsnsjssjf"));
-        addMessage(new Message("What about you", "ajsnsjssjf"));
+        messageEdit = findViewById(R.id.message_edit);
+        sendButton = findViewById(R.id.send_message_button);
+        sendButton.setOnClickListener(this);
     }
 
     private void setupRecyclerView() {
@@ -43,6 +45,14 @@ public class MainActivity extends AppCompatActivity implements ChatView {
     public void addMessage(Message message) {
         if (chatAdapter != null) {
             chatAdapter.addMessage(message);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.send_message_button:
+                break;
         }
     }
 }
