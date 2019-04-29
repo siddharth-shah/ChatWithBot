@@ -9,12 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import co.chatbot.AppConstants;
 import co.chatbot.R;
 import co.chatbot.data.models.Message;
 import co.chatbot.presenter.ChatPresenter;
 import co.chatbot.presenter.ChatPresenterImpl;
+import co.chatbot.utils.NetworkUtils;
 
 public class MainActivity extends AppCompatActivity implements ChatView, View.OnClickListener {
 
@@ -60,9 +62,18 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
     }
 
     @Override
+    public void showError(String errorMessage) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.send_message_button:
+                if (!NetworkUtils.getInstance(this).isConnected()) {
+                    showError("Please check your internet and try again");
+                    return;
+                }
                 String message = messageEdit.getEditableText().toString();
                 final String currentUser = PreferenceManager.
                         getDefaultSharedPreferences(this).getString(AppConstants
