@@ -79,6 +79,14 @@ public class ChatAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public void setMessages(List<ChatItem> messages) {
+        if (this.chatItems == null)
+            chatItems = new ArrayList<>();
+        chatItems.clear();
+        chatItems.addAll(messages);
+        notifyDataSetChanged();
+    }
+
     class MyMessageViewHolder extends RecyclerView.ViewHolder {
         TextView myMessage;
 
