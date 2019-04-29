@@ -24,11 +24,13 @@ public class ChatPresenterImpl implements ChatPresenter {
     }
 
     @Override
-    public void sendMessage(String message) {
+    public void sendMessage(String message, String senderId, String botId) {
+        // add current message in the view
+        chatView.addMessage(new Message(message, senderId));
         HashMap<String, String> queryMap = new HashMap<>();
         queryMap.put(AppConstants.QUERY_PARAM_MESSAGE, message);
-        queryMap.put(AppConstants.QUERY_PARAM_EXTERNAL_ID, "ajsnsjssjf");
-        queryMap.put(AppConstants.QUERY_FIRST_NAME, "Siddharth");
+        queryMap.put(AppConstants.QUERY_PARAM_EXTERNAL_ID, senderId);
+        queryMap.put(AppConstants.QUERY_PARAM_CHAT_BOT_ID, botId);
         chatApi.sendMessage(queryMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
