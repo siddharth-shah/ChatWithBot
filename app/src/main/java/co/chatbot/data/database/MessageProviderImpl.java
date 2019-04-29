@@ -26,7 +26,7 @@ public class MessageProviderImpl implements MessageProvider {
         QueryBuilder<Message> qb = messageDao.queryBuilder();
         qb.where(c1, c2);
 
-        return Observable.just(qb.orderDesc(MessageDao.Properties.CreatedAt).list());
+        return Observable.just(qb.orderAsc(MessageDao.Properties.CreatedAt).list());
     }
 
     @Override
