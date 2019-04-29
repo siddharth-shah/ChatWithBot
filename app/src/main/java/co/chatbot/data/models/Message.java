@@ -4,4 +4,11 @@ public class Message {
     String message;
     String senderId;
 
+    public String getMessage() {
+        return message;
+    }
+
+    public String getSenderId() {
+        return senderId;
+    }
 }
