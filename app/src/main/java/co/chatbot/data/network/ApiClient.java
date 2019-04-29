@@ -39,9 +39,9 @@ public class ApiClient {
                         Request request = chain.request();
                         final HttpUrl url = request.url();
                         final HttpUrl newUrl = url.newBuilder()
-                                .addQueryParameter(AppConstants.QUERY_PARAM_API_KEY, AppConstants.API_KEY)
-                                .addQueryParameter(AppConstants.QUERY_PARAM_CHAT_BOT_ID,
-                                        AppConstants.CHAT_BOT_ID).build();
+                                .addQueryParameter(AppConstants.QUERY_PARAM_API_KEY,
+                                        AppConstants.API_KEY)
+                                .build();
 
                         Request newRequest = request.newBuilder()
                                 .url(newUrl).build();
