@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import co.chatbot.R;
+import co.chatbot.presenter.ChatPresenterImpl;
 
 public class MainActivity extends AppCompatActivity implements ChatView {
 
@@ -11,5 +12,8 @@ public class MainActivity extends AppCompatActivity implements ChatView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ChatPresenterImpl presenter =
+                new ChatPresenterImpl(this);
+        presenter.sendMessage("Hey! What's up?");
     }
 }
