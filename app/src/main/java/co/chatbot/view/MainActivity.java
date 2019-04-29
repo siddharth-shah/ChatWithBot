@@ -1,6 +1,8 @@
 package co.chatbot.view;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import co.chatbot.AppConstants;
 import co.chatbot.R;
 import co.chatbot.data.models.Message;
 import co.chatbot.presenter.ChatPresenter;
@@ -30,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
         messageEdit = findViewById(R.id.message_edit);
         sendButton = findViewById(R.id.send_message_button);
         sendButton.setOnClickListener(this);
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.putString(AppConstants.QUERY_PARAM_EXTERNAL_ID, "siddharthshah");
+        editor.apply();
     }
 
     private void setupRecyclerView() {
@@ -58,9 +64,11 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
         switch (v.getId()) {
             case R.id.send_message_button:
                 String message = messageEdit.getEditableText().toString();
-                addMessage(new Message(message, "ajsnsjssjf"));
+                final String currentUser = PreferenceManager.
+                        getDefaultSharedPreferences(this).getString(AppConstants
+                        .QUERY_PARAM_EXTERNAL_ID, "");
                 if (presenter != null) {
-                    presenter.sendMessage(message);
+                    presenter.sendMessage(message, currentUser, "63906");
                     messageEdit.getText().clear();
                 }
                 break;
