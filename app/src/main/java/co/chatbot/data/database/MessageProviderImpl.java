@@ -7,6 +7,7 @@ import java.util.List;
 
 import co.chatbot.data.database.models.Message;
 import co.chatbot.data.database.models.MessageDao;
+import io.reactivex.Observable;
 
 public class MessageProviderImpl implements MessageProvider {
 
@@ -17,7 +18,7 @@ public class MessageProviderImpl implements MessageProvider {
     }
 
     @Override
-    public List<Message> getAllMessagesWithBot(String chatbotID, String externalID) {
+    public Observable<List<Message>> getAllMessagesWithBot(String chatbotID, String externalID) {
 
         WhereCondition c1 = MessageDao.Properties.ChatBotID.eq(chatbotID);
         WhereCondition c2 = MessageDao.Properties.ExternalID.eq(externalID);
@@ -25,7 +26,7 @@ public class MessageProviderImpl implements MessageProvider {
         QueryBuilder<Message> qb = messageDao.queryBuilder();
         qb.where(c1, c2);
 
-        return qb.orderDesc(MessageDao.Properties.CreatedAt).list();
+        return Observable.just(qb.orderDesc(MessageDao.Properties.CreatedAt).list());
     }
 
     @Override
