@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import co.chatbot.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ChatView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
