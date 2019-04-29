@@ -4,5 +4,5 @@ public class BotResponse {
 
     int success;
     String errorMessage;
-    BotResponse message;
+    BotMessage message;
 }
