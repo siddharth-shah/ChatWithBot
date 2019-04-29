@@ -17,19 +17,32 @@ public class MainActivity extends AppCompatActivity implements ChatView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        chatAdapter = new ChatAdapter(this);
         setupRecyclerView();
-        chatList.setAdapter(chatAdapter);
+        addMessage(new Message("Hey What's up", "ajsnsjssjf"));
+        addMessage(new Message("I am cool. What's up with you?", "63906"));
+        addMessage(new Message("Cool cool", "ajsnsjssjf"));
+        addMessage(new Message("Did you watch Endgame", "63906"));
+        addMessage(new Message("Yup", "ajsnsjssjf"));
+        addMessage(new Message("What about you", "ajsnsjssjf"));
     }
 
     private void setupRecyclerView() {
-        chatList = findViewById(R.id.chat_list);
         //stack like list for chatItems
-        chatList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
+        chatList = findViewById(R.id.chat_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setStackFromEnd(true);
+        chatList.setLayoutManager(layoutManager);
+        chatList.setHasFixedSize(true);
+        chatAdapter = new ChatAdapter(this);
+        chatList.setAdapter(chatAdapter);
+
+
     }
 
     @Override
     public void addMessage(Message message) {
-
+        if (chatAdapter != null) {
+            chatAdapter.addMessage(message);
+        }
     }
 }
