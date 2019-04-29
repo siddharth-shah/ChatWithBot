@@ -6,9 +6,9 @@ import org.greenrobot.greendao.database.Database;
 
 import co.chatbot.data.database.models.DaoMaster;
 
-public class DatabaseHelper extends DaoMaster.OpenHelper {
+public class DatabaseOpenHelper extends DaoMaster.OpenHelper {
 
-    public DatabaseHelper(Context context, String name) {
+    public DatabaseOpenHelper(Context context, String name) {
         super(context, name);
     }
 
