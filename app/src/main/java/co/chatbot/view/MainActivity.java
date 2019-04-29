@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
     Button sendButton;
     ChatPresenter presenter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +42,14 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
         messageEdit = findViewById(R.id.message_edit);
         sendButton = findViewById(R.id.send_message_button);
         sendButton.setOnClickListener(this);
+        setUserInPreferences("siddharthshah");
+        presenter.getAllMessages("siddharthshah", AppConstants.CHAT_BOT_ID);
+    }
+
+    private void setUserInPreferences(String userId) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        editor.putString(AppConstants.QUERY_PARAM_EXTERNAL_ID, "siddharthshah");
+        editor.putString(AppConstants.QUERY_PARAM_EXTERNAL_ID, userId);
         editor.apply();
-        presenter.getAllMessages("siddharthshah", "63906");
     }
 
     private void setupRecyclerView() {
@@ -91,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
                         getDefaultSharedPreferences(this).getString(AppConstants
                         .QUERY_PARAM_EXTERNAL_ID, "");
                 if (presenter != null) {
-                    presenter.sendMessage(message, currentUser, "63906");
+                    presenter.sendMessage(message, currentUser, AppConstants.CHAT_BOT_ID);
                     messageEdit.getText().clear();
                 }
                 break;
