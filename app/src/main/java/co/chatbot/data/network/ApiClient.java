@@ -13,7 +13,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class ApiClient {
-    public static final String BASE_URL = "http://www.personalityforge.com/api/";
+    public static final String BASE_URL = "https://www.personalityforge.com/";
 
 
     private static Retrofit retrofit = null;

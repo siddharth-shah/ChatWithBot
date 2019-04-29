@@ -9,6 +9,6 @@ import retrofit2.http.QueryMap;
 
 public interface ChatApi {
 
-    @GET("/chat/")
+    @GET("/api/chat")
     Observable<BotResponse> sendMessage(@QueryMap HashMap<String, String> params);
 }
