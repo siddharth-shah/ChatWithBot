@@ -1,14 +1,14 @@
 package co.chatbot.data.models;
 
-public class Message {
+public class ChatItem {
     String message;
     String senderId;
 
-    public Message() {
+    public ChatItem() {
         super();
     }
 
-    public Message(String message, String senderId) {
+    public ChatItem(String message, String senderId) {
         this.message = message;
         this.senderId = senderId;
     }

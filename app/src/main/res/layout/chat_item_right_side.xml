@@ -15,6 +15,6 @@
         android:textColor="@android:color/white"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="This is my message" />
+        tools:text="This is my chatItem" />
 
 </android.support.constraint.ConstraintLayout>

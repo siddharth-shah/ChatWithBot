@@ -14,14 +14,14 @@ import java.util.List;
 
 import co.chatbot.AppConstants;
 import co.chatbot.R;
-import co.chatbot.data.models.Message;
+import co.chatbot.data.models.ChatItem;
 
 public class ChatAdapter extends RecyclerView.Adapter {
 
     private static final int MY_MESSAGE = 1;
     private static final int OTHERS_MESSAGE = 2;
     private Context context;
-    List<Message> messages;
+    List<ChatItem> chatItems;
 
     public ChatAdapter(Context context) {
         this.context = context;
@@ -45,34 +45,34 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-        final Message message = messages.get(i);
+        final ChatItem chatItem = chatItems.get(i);
         if (viewHolder instanceof MyMessageViewHolder) {
-            ((MyMessageViewHolder) viewHolder).myMessage.setText(message.getMessage());
+            ((MyMessageViewHolder) viewHolder).myMessage.setText(chatItem.getMessage());
         } else if (viewHolder instanceof OtherMessageViewHolder) {
-            ((OtherMessageViewHolder) viewHolder).otherMessage.setText(message.getMessage());
+            ((OtherMessageViewHolder) viewHolder).otherMessage.setText(chatItem.getMessage());
         }
     }
 
     @Override
     public int getItemCount() {
-        if (messages == null)
+        if (chatItems == null)
             return 0;
-        return messages.size();
+        return chatItems.size();
     }
 
 
-    public void addMessage(Message message) {
-        if (messages == null)
-            messages = new ArrayList<>();
-        messages.add(message);
-        notifyItemInserted(messages.size() - 1);
+    public void addMessage(ChatItem chatItem) {
+        if (chatItems == null)
+            chatItems = new ArrayList<>();
+        chatItems.add(chatItem);
+        notifyItemInserted(chatItems.size() - 1);
     }
 
     @Override
     public int getItemViewType(int position) {
         String currentUser = PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(AppConstants.QUERY_PARAM_EXTERNAL_ID, "");
-        if (messages.get(position).getSenderId().equalsIgnoreCase(currentUser)) {
+        if (chatItems.get(position).getSenderId().equalsIgnoreCase(currentUser)) {
             return MY_MESSAGE;
         } else {
             return OTHERS_MESSAGE;

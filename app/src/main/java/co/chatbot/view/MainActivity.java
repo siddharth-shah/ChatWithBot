@@ -15,7 +15,7 @@ import co.chatbot.AppConstants;
 import co.chatbot.ChatApplication;
 import co.chatbot.R;
 import co.chatbot.data.database.MessageProviderImpl;
-import co.chatbot.data.models.Message;
+import co.chatbot.data.models.ChatItem;
 import co.chatbot.presenter.ChatPresenter;
 import co.chatbot.presenter.ChatPresenterImpl;
 import co.chatbot.utils.NetworkUtils;
@@ -58,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
     }
 
     @Override
-    public void addMessage(Message message) {
+    public void addMessage(ChatItem chatItem) {
         if (chatAdapter != null) {
-            chatAdapter.addMessage(message);
+            chatAdapter.addMessage(chatItem);
             chatList.scrollToPosition(chatAdapter.getItemCount() - 1);
         }
     }
