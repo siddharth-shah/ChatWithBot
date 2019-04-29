@@ -1,5 +1,5 @@
 package co.chatbot.presenter;
 
 public interface ChatPresenter {
-    void sendMessage(String message);
+    void sendMessage(String message, String senderId, String botId);
 }
