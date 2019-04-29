@@ -6,8 +6,8 @@ import co.chatbot.data.database.models.Message;
 
 public interface MessageProvider {
 
-    List<Message> getAllMessagesWithBot(String chatbotID);
+    List<Message> getAllMessagesWithBot(String chatbotID, String externalID);
 
-    void addMessage(Message message);
+    boolean addMessage(Message message);
 
 }
