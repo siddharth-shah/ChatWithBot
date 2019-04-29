@@ -2,6 +2,7 @@ package co.chatbot.presenter;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import co.chatbot.AppConstants;
 import co.chatbot.data.database.MessageProvider;
@@ -42,6 +43,8 @@ public class ChatPresenterImpl implements ChatPresenter {
         dbMessage.setCreatedAt(new Date().getTime());
         dbMessage.setSenderID(userId);
         messageProvider.addMessage(dbMessage);
+        addMessageToChat(dbMessage);
+
         // add current messageText in the view
         chatView.addMessage(new ChatItem(messageText, userId));
         HashMap<String, String> queryMap = new HashMap<>();
@@ -51,29 +54,29 @@ public class ChatPresenterImpl implements ChatPresenter {
         chatApi.sendMessage(queryMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Function<BotResponse, ChatItem>() {
+                .map(new Function<BotResponse, Message>() {
                     @Override
-                    public ChatItem apply(BotResponse botResponse) throws Exception {
-                        return new ChatItem(botResponse.getMessage().getMessage(),
-                                String.valueOf(botResponse.getMessage().getChatBotID()));
+                    public Message apply(BotResponse botResponse) throws Exception {
+                        Message message = new Message();
+                        final String chatbotId = String.valueOf(botResponse.getMessage().getChatBotID());
+                        message.setSenderID(chatbotId);
+                        message.setMessageText(botResponse.getMessage().getMessage());
+                        message.setExternalID(userId);
+                        message.setChatBotID(chatbotId);
+                        message.setCreatedAt(new Date().getTime());
+                        return message;
                     }
-                }).subscribe(new Observer<ChatItem>() {
+                }).subscribe(new Observer<Message>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(ChatItem chatItem) {
-                Message dbMessage = new Message();
+            public void onNext(Message message) {
+                messageProvider.addMessage(message);
+                addMessageToChat(message);
 
-                dbMessage.setChatBotID(botId);
-                dbMessage.setExternalID(userId);
-                dbMessage.setMessageText(chatItem.getMessage());
-                dbMessage.setCreatedAt(new Date().getTime());
-                dbMessage.setSenderID(botId);
-                messageProvider.addMessage(dbMessage);
-                chatView.addMessage(chatItem);
             }
 
             @Override
@@ -86,5 +89,43 @@ public class ChatPresenterImpl implements ChatPresenter {
 
             }
         });
+
+    }
+
+    private void addMessageToChat(Message dbMessage) {
+        ChatItem chatItem = getChatItemFromDbMessage(dbMessage);
+        chatView.addMessage(chatItem);
+    }
+
+    private ChatItem getChatItemFromDbMessage(Message dbMessage) {
+        return new ChatItem(dbMessage.getMessageText(), dbMessage.getSenderID());
+    }
+
+    @Override
+    public void getAllMessages(String userId, String botId) {
+        messageProvider.getAllMessagesWithBot(userId,botId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Message>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Message> messages) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 }
