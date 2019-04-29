@@ -30,6 +30,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/vertical_guidline_for_edit_text"
         app:layout_constraintRight_toRightOf="parent"
+
         app:layout_constraintTop_toBottomOf="@id/send_message_layout_barrier" />
 
     <android.support.constraint.Barrier
@@ -44,7 +45,7 @@
         android:id="@+id/chat_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#F7F4F4"
+        android:background="#ECE5DD"
         app:layout_constraintBottom_toTopOf="@id/send_message_layout_barrier"
         app:layout_constraintTop_toTopOf="parent" />
 
