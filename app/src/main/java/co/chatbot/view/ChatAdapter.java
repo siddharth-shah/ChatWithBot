@@ -27,13 +27,13 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        switch (getItemViewType(i)) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        switch (viewType) {
             case MY_MESSAGE:
                 return new MyMessageViewHolder(LayoutInflater.from(context)
                         .inflate(R.layout.chat_item_right_side, viewGroup, false));
             case OTHERS_MESSAGE:
-                return new MyMessageViewHolder(LayoutInflater.from(context)
+                return new OtherMessageViewHolder(LayoutInflater.from(context)
                         .inflate(R.layout.chat_item_left_side, viewGroup, false));
             default:
                 throw new IllegalArgumentException("No such view type exists");
@@ -46,7 +46,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
         final Message message = messages.get(i);
         if (viewHolder instanceof MyMessageViewHolder) {
             ((MyMessageViewHolder) viewHolder).myMessage.setText(message.getMessage());
-        } else {
+        } else if (viewHolder instanceof OtherMessageViewHolder) {
             ((OtherMessageViewHolder) viewHolder).otherMessage.setText(message.getMessage());
         }
     }
