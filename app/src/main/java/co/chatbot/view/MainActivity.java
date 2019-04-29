@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.List;
+
 import co.chatbot.AppConstants;
 import co.chatbot.ChatApplication;
 import co.chatbot.R;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
         editor.putString(AppConstants.QUERY_PARAM_EXTERNAL_ID, "siddharthshah");
         editor.apply();
+        presenter.getAllMessages("siddharthshah", "63906");
     }
 
     private void setupRecyclerView() {
@@ -68,6 +71,11 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
     @Override
     public void showError(String errorMessage) {
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onInitialMessagesLoaded(List<ChatItem> messages) {
+        chatAdapter.setMessages(messages);
     }
 
     @Override
