@@ -6,7 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import co.chatbot.R;
@@ -41,7 +43,12 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-
+        final Message message = messages.get(i);
+        if (viewHolder instanceof MyMessageViewHolder) {
+            ((MyMessageViewHolder) viewHolder).myMessage.setText(message.getMessage());
+        } else {
+            ((OtherMessageViewHolder) viewHolder).otherMessage.setText(message.getMessage());
+        }
     }
 
     @Override
@@ -49,6 +56,14 @@ public class ChatAdapter extends RecyclerView.Adapter {
         if (messages == null)
             return 0;
         return messages.size();
+    }
+
+
+    public void addMessage(Message message) {
+        if (messages == null)
+            messages = new ArrayList<>();
+        messages.add(message);
+        notifyItemInserted(messages.size() - 1);
     }
 
     @Override
@@ -61,17 +76,24 @@ public class ChatAdapter extends RecyclerView.Adapter {
     }
 
     class MyMessageViewHolder extends RecyclerView.ViewHolder {
+        TextView myMessage;
 
         public MyMessageViewHolder(@NonNull View itemView) {
             super(itemView);
+            myMessage = itemView.findViewById(R.id.my_message);
         }
     }
 
 
     class OtherMessageViewHolder extends RecyclerView.ViewHolder {
 
+        TextView otherMessage;
+
         public OtherMessageViewHolder(@NonNull View itemView) {
             super(itemView);
+            otherMessage = itemView.findViewById(R.id.bot_message);
         }
+
+
     }
 }
