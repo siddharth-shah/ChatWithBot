@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
     public void addMessage(Message message) {
         if (chatAdapter != null) {
             chatAdapter.addMessage(message);
+            chatList.scrollToPosition(chatAdapter.getItemCount() - 1);
         }
     }
 
@@ -56,6 +57,12 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.send_message_button:
+                String message = messageEdit.getEditableText().toString();
+                addMessage(new Message(message, "ajsnsjssjf"));
+                if (presenter != null) {
+                    presenter.sendMessage(message);
+                    messageEdit.getText().clear();
+                }
                 break;
         }
     }
