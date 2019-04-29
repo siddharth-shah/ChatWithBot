@@ -1,5 +1,6 @@
 package co.chatbot.presenter;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import co.chatbot.AppConstants;
@@ -32,7 +33,14 @@ public class ChatPresenterImpl implements ChatPresenter {
     }
 
     @Override
-    public void sendMessage(String message, String senderId, String botId) {
+    public void sendMessage(final String message, final String senderId, final String botId) {
+        co.chatbot.data.database.models.Message dbMessage = new co.chatbot.data.database.models.Message();
+        dbMessage.setChatBotID(botId);
+        dbMessage.setExternalID(senderId);
+        dbMessage.setMessageText(message);
+        dbMessage.setCreatedAt(new Date().getTime());
+        dbMessage.setSenderID(senderId);
+        messageProvider.addMessage(dbMessage);
         // add current message in the view
         chatView.addMessage(new Message(message, senderId));
         HashMap<String, String> queryMap = new HashMap<>();
@@ -45,7 +53,6 @@ public class ChatPresenterImpl implements ChatPresenter {
                 .map(new Function<BotResponse, Message>() {
                     @Override
                     public Message apply(BotResponse botResponse) throws Exception {
-
                         return new Message(botResponse.getMessage().getMessage(),
                                 String.valueOf(botResponse.getMessage().getChatBotID()));
                     }
@@ -57,6 +64,14 @@ public class ChatPresenterImpl implements ChatPresenter {
 
             @Override
             public void onNext(Message message) {
+                co.chatbot.data.database.models.Message dbMessage = new co.chatbot.data.database.models.Message();
+
+                dbMessage.setChatBotID(botId);
+                dbMessage.setExternalID(senderId);
+                dbMessage.setMessageText(message.getMessage());
+                dbMessage.setCreatedAt(new Date().getTime());
+                dbMessage.setSenderID(botId);
+                messageProvider.addMessage(dbMessage);
                 chatView.addMessage(message);
             }
 
