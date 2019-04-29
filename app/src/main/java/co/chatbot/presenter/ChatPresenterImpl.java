@@ -3,6 +3,7 @@ package co.chatbot.presenter;
 import java.util.HashMap;
 
 import co.chatbot.AppConstants;
+import co.chatbot.data.database.MessageProvider;
 import co.chatbot.data.models.BotResponse;
 import co.chatbot.data.models.Message;
 import co.chatbot.data.network.ApiClient;
@@ -15,12 +16,19 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class ChatPresenterImpl implements ChatPresenter {
+    private MessageProvider messageProvider;
     ChatView chatView;
     ChatApi chatApi;
 
     public ChatPresenterImpl(ChatView chatView) {
         this.chatView = chatView;
         this.chatApi = ApiClient.getClient().create(ChatApi.class);
+    }
+
+    public ChatPresenterImpl(ChatView chatView, MessageProvider messageProvider) {
+        this.chatView = chatView;
+        this.chatApi = ApiClient.getClient().create(ChatApi.class);
+        this.messageProvider = messageProvider;
     }
 
     @Override
