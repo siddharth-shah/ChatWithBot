@@ -12,6 +12,7 @@ import co.chatbot.data.models.ChatItem;
 import co.chatbot.data.network.ApiClient;
 import co.chatbot.data.network.ChatApi;
 import co.chatbot.view.ChatView;
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -46,7 +47,6 @@ public class ChatPresenterImpl implements ChatPresenter {
         addMessageToChat(dbMessage);
 
         // add current messageText in the view
-        chatView.addMessage(new ChatItem(messageText, userId));
         HashMap<String, String> queryMap = new HashMap<>();
         queryMap.put(AppConstants.QUERY_PARAM_MESSAGE, messageText);
         queryMap.put(AppConstants.QUERY_PARAM_EXTERNAL_ID, userId);
@@ -103,18 +103,22 @@ public class ChatPresenterImpl implements ChatPresenter {
 
     @Override
     public void getAllMessages(String userId, String botId) {
-        messageProvider.getAllMessagesWithBot(userId,botId)
+        messageProvider.getAllMessagesWithBot(botId, userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Message>>() {
+                .flatMap(list -> Observable.fromIterable(list))
+                .map(message -> getChatItemFromDbMessage(message))
+                .toList()
+                .toObservable()
+                .subscribe(new Observer<List<ChatItem>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(List<Message> messages) {
-
+                    public void onNext(List<ChatItem> chatItems) {
+                        chatView.onInitialMessagesLoaded(chatItems);
                     }
 
                     @Override
