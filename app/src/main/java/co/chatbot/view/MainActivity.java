@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
                         getDefaultSharedPreferences(this).getString(AppConstants
                         .QUERY_PARAM_EXTERNAL_ID, "");
                 if (presenter != null) {
-                    presenter.sendMessage(message, currentUser, AppConstants.CHAT_BOT_ID);
+                    presenter.onSendButtonClicked(message, currentUser, AppConstants.CHAT_BOT_ID);
                     messageEdit.getText().clear();
                 }
                 break;
