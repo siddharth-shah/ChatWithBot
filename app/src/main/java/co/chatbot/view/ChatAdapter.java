@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import co.chatbot.AppConstants;
@@ -66,6 +67,25 @@ public class ChatAdapter extends RecyclerView.Adapter {
             chatItems = new ArrayList<>();
         chatItems.add(chatItem);
         notifyItemInserted(chatItems.size() - 1);
+    }
+
+    public void updateMessage(ChatItem chatItem) {
+        if (chatItems == null)
+            return;
+        int count = -1;
+        final Iterator<ChatItem> iterator = chatItems.iterator();
+        while (iterator.hasNext()) {
+            count++;
+            final ChatItem item = iterator.next();
+            if (item.getTimestamp() == chatItem.getTimestamp()) {
+                chatItems.set(count, chatItem);
+                break;
+            }
+        }
+        if (count > -1 && count < chatItems.size()) {
+            notifyItemChanged(count);
+        }
+
     }
 
     @Override
