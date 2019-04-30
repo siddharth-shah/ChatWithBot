@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
         sendButton.setOnClickListener(this);
         setUserInPreferences("siddharthshah");
         presenter.getAllMessages("siddharthshah", AppConstants.CHAT_BOT_ID);
+        presenter.retrySendingFailedMessages(AppConstants.CHAT_BOT_ID,"siddharthshah");
     }
 
     private void setUserInPreferences(String userId) {
@@ -131,6 +132,9 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
             if (CONNECTIVITY_ACTION.equalsIgnoreCase(action)) {
                 if (NetworkUtils.getInstance(MainActivity.this).isConnected()) {
                     Log.d("Network check", "connected");
+                    presenter.retrySendingFailedMessages(AppConstants.CHAT_BOT_ID,
+                            PreferenceManager.getDefaultSharedPreferences(MainActivity.this)
+                                    .getString(AppConstants.QUERY_PARAM_EXTERNAL_ID, ""));
                 }
             }
         }

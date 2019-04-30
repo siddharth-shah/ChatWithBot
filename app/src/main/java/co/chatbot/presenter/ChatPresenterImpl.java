@@ -1,5 +1,7 @@
 package co.chatbot.presenter;
 
+import android.util.Log;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +54,7 @@ public class ChatPresenterImpl implements ChatPresenter {
             addMessageToChat(dbMessage);
             return;
         }
+        addMessageToChat(dbMessage);
         sendMessageToServer(dbMessage);
 
     }
@@ -144,6 +147,35 @@ public class ChatPresenterImpl implements ChatPresenter {
                     @Override
                     public void onNext(List<ChatItem> chatItems) {
                         chatView.onInitialMessagesLoaded(chatItems);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void retrySendingFailedMessages(String chatbotID, String senderId) {
+        Log.d("chat presenter", "retry");
+        messageProvider.getUndeliveredMessage(chatbotID, senderId)
+                .subscribeOn(Schedulers.io())
+                .flatMap(list -> Observable.fromIterable(list))
+                .subscribe(new Observer<Message>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Message message) {
+                        sendMessageToServer(message);
                     }
 
                     @Override
