@@ -48,6 +48,13 @@ public class ChatAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         final ChatItem chatItem = chatItems.get(i);
         if (viewHolder instanceof MyMessageViewHolder) {
+            if (chatItem.getStatus().equalsIgnoreCase("failed")) {
+                ((MyMessageViewHolder) viewHolder).myMessage.setBackground(context.
+                        getDrawable(R.drawable.chat_bubble_right_failed));
+            } else {
+                ((MyMessageViewHolder) viewHolder).myMessage.setBackground(context.
+                        getDrawable(R.drawable.chat_bubble_right));
+            }
             ((MyMessageViewHolder) viewHolder).myMessage.setText(chatItem.getMessage());
         } else if (viewHolder instanceof OtherMessageViewHolder) {
             ((OtherMessageViewHolder) viewHolder).otherMessage.setText(chatItem.getMessage());

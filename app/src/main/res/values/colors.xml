@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#075E54</color>
     <color name="colorAccent">#D81B60</color>
     <color name="outgoing_message">#DCF8C6</color>
+    <color name="outgoing_message_failed">#DBDBDB</color>
     <color name="incoming_message">#FFF</color>
 </resources>
