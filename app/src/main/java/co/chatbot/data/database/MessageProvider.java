@@ -13,4 +13,6 @@ public interface MessageProvider {
 
     void updateMessage(Message message);
 
+    Observable<List<Message>> getUndeliveredMessage(String chatbotID, String externalID);
+
 }

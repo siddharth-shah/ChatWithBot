@@ -38,4 +38,17 @@ public class MessageProviderImpl implements MessageProvider {
     public void updateMessage(Message message) {
         messageDao.update(message);
     }
+
+    @Override
+    public Observable<List<Message>> getUndeliveredMessage(String chatbotID, String externalID) {
+        WhereCondition c1 = MessageDao.Properties.ChatBotID.eq(chatbotID);
+        WhereCondition c2 = MessageDao.Properties.ExternalID.eq(externalID);
+        WhereCondition c3 = MessageDao.Properties.SenderID.eq(externalID);
+        WhereCondition c4 = MessageDao.Properties.Status.eq("failed");
+
+        QueryBuilder<Message> qb = messageDao.queryBuilder();
+        qb.where(c1, c2,c3,c4);
+
+        return Observable.just(qb.orderAsc(MessageDao.Properties.CreatedAt).list());
+    }
 }
