@@ -87,16 +87,16 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.send_message_button:
-                if (!NetworkUtils.getInstance(this).isConnected()) {
-                    showError("Please check your internet and try again");
-                    return;
+                final boolean isConnected = NetworkUtils.getInstance(this).isConnected();
+                if (!isConnected) {
+                    showError("Please check your internet");
                 }
                 String message = messageEdit.getEditableText().toString();
                 final String currentUser = PreferenceManager.
                         getDefaultSharedPreferences(this).getString(AppConstants
                         .QUERY_PARAM_EXTERNAL_ID, "");
                 if (presenter != null) {
-                    presenter.onSendButtonClicked(message, currentUser, AppConstants.CHAT_BOT_ID);
+                    presenter.onSendButtonClicked(message, currentUser, AppConstants.CHAT_BOT_ID, isConnected);
                     messageEdit.getText().clear();
                 }
                 break;
