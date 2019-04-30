@@ -98,11 +98,13 @@ public class ChatPresenterImpl implements ChatPresenter {
     private Message getMessageForDB(String messageText, String chatbotID, String externalID
             , String senderID, long timestamp, String status) {
         Message dbMessage = new Message();
+        dbMessage.setLocalId(timestamp);
         dbMessage.setChatBotID(chatbotID);
         dbMessage.setExternalID(externalID);
         dbMessage.setMessageText(messageText);
         dbMessage.setCreatedAt(timestamp);
         dbMessage.setSenderID(senderID);
+        dbMessage.setStatus(status);
 
         return dbMessage;
 
