@@ -2,6 +2,8 @@ package co.chatbot;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
+
 import org.greenrobot.greendao.database.Database;
 
 import co.chatbot.data.database.DatabaseOpenHelper;
@@ -15,6 +17,7 @@ public class ChatApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Stetho.initializeWithDefaults(this);
         DaoMaster.OpenHelper openHelper
                 = new DatabaseOpenHelper(this, "chatbot-db");
         Database database = openHelper.getWritableDb();
