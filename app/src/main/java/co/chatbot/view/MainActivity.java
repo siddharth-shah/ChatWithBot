@@ -49,9 +49,10 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
         messageEdit = findViewById(R.id.message_edit);
         sendButton = findViewById(R.id.send_message_button);
         sendButton.setOnClickListener(this);
-        setUserInPreferences("siddharthshah");
-        presenter.getAllMessages("siddharthshah", AppConstants.CHAT_BOT_ID);
-        presenter.retrySendingFailedMessages(AppConstants.CHAT_BOT_ID, "siddharthshah");
+        final String userId = "siddharthshah";
+        setUserInPreferences(userId);
+        presenter.getAllMessages(userId, AppConstants.CHAT_BOT_ID);
+        presenter.retrySendingFailedMessages(AppConstants.CHAT_BOT_ID, userId);
     }
 
     private void setUserInPreferences(String userId) {

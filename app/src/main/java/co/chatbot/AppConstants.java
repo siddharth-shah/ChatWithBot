@@ -9,6 +9,9 @@ public class AppConstants {
     public static final String QUERY_FIRST_NAME = "firstName";
     public static final String API_KEY = "6nt5d1nJHkqbkphe";
     public static final String CHAT_BOT_ID = "63906";
+    public static final String STATUS_SUCCESS = "success";
+    public static final String STATUS_PENDING = "pending";
+    public static final String STATUS_FAILED = "failed";
 
 
 }

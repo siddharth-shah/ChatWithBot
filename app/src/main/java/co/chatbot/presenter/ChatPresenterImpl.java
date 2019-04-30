@@ -41,14 +41,14 @@ public class ChatPresenterImpl implements ChatPresenter {
     public void onSendButtonClicked(final String messageText,
 
                                     final String userId, final String botId, boolean isConnected) {
-        String status = "pending";
+        String status = AppConstants.STATUS_PENDING;
 
         Message dbMessage =
                 getMessageForDB(messageText, botId, userId,
                         userId, new Date().getTime(), status);
         messageProvider.addMessage(dbMessage);
         if (!isConnected) {
-            status = "failed";
+            status = AppConstants.STATUS_FAILED;
             dbMessage.setStatus(status);
             messageProvider.updateMessage(dbMessage);
             addMessageToChat(dbMessage);
@@ -74,7 +74,7 @@ public class ChatPresenterImpl implements ChatPresenter {
                         final String chatBotID = String.
                                 valueOf(botResponse.getMessage().getChatBotID());
                         Message message =
-                                getMessageForDB(botResponse.getMessage().getMessage(), chatBotID, dbMessage.getExternalID(), chatBotID, new Date().getTime(), "success");
+                                getMessageForDB(botResponse.getMessage().getMessage(), chatBotID, dbMessage.getExternalID(), chatBotID, new Date().getTime(), AppConstants.STATUS_SUCCESS);
                         return message;
                     }
                 }).subscribe(new Observer<Message>() {
@@ -86,7 +86,7 @@ public class ChatPresenterImpl implements ChatPresenter {
             @Override
             public void onNext(Message message) {
                 messageProvider.addMessage(message);
-                dbMessage.setStatus("success");
+                dbMessage.setStatus(AppConstants.STATUS_SUCCESS);
                 messageProvider.updateMessage(dbMessage);
                 updateMessageInChatList(dbMessage);
                 addMessageToChat(message);
@@ -95,7 +95,7 @@ public class ChatPresenterImpl implements ChatPresenter {
 
             @Override
             public void onError(Throwable e) {
-                dbMessage.setStatus("failed");
+                dbMessage.setStatus(AppConstants.STATUS_FAILED);
                 messageProvider.updateMessage(dbMessage);
                 updateMessageInChatList(dbMessage);
             }
