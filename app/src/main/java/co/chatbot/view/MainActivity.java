@@ -1,11 +1,16 @@
 package co.chatbot.view;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,12 +34,14 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
     EditText messageEdit;
     Button sendButton;
     ChatPresenter presenter;
-
+    final static String CONNECTIVITY_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
+    ConnectivityReceiver connectivityReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        connectivityReceiver = new ConnectivityReceiver();
         presenter = new ChatPresenterImpl(this,
                 new MessageProviderImpl(((ChatApplication) getApplication())
                         .getDaoSession().getMessageDao()));
@@ -102,4 +109,32 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
                 break;
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(connectivityReceiver, new IntentFilter(CONNECTIVITY_ACTION));
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(connectivityReceiver);
+    }
+
+    class ConnectivityReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (CONNECTIVITY_ACTION.equalsIgnoreCase(action)) {
+                if (NetworkUtils.getInstance(MainActivity.this).isConnected()) {
+                    Log.d("Network check", "connected");
+                }
+            }
+        }
+    }
+
+
 }
