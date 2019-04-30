@@ -36,34 +36,33 @@ public class ChatPresenterImpl implements ChatPresenter {
     }
 
     @Override
-    public void sendMessage(final String messageText, final String userId, final String botId) {
-        Message dbMessage = new Message();
-        dbMessage.setChatBotID(botId);
-        dbMessage.setExternalID(userId);
-        dbMessage.setMessageText(messageText);
-        dbMessage.setCreatedAt(new Date().getTime());
-        dbMessage.setSenderID(userId);
+    public void onSendButtonClicked(final String messageText, final String userId, final String botId) {
+        String status = "pending";
+        Message dbMessage =
+                getMessageForDB(messageText, botId, userId,
+                        userId, new Date().getTime(), status);
         messageProvider.addMessage(dbMessage);
         addMessageToChat(dbMessage);
+        sendMessageToServer(dbMessage);
 
+    }
+
+    private void sendMessageToServer(Message dbMessage) {
         // add current messageText in the view
         HashMap<String, String> queryMap = new HashMap<>();
-        queryMap.put(AppConstants.QUERY_PARAM_MESSAGE, messageText);
-        queryMap.put(AppConstants.QUERY_PARAM_EXTERNAL_ID, userId);
-        queryMap.put(AppConstants.QUERY_PARAM_CHAT_BOT_ID, botId);
+        queryMap.put(AppConstants.QUERY_PARAM_MESSAGE, dbMessage.getMessageText());
+        queryMap.put(AppConstants.QUERY_PARAM_EXTERNAL_ID, dbMessage.getExternalID());
+        queryMap.put(AppConstants.QUERY_PARAM_CHAT_BOT_ID, dbMessage.getChatBotID());
         chatApi.sendMessage(queryMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Function<BotResponse, Message>() {
                     @Override
                     public Message apply(BotResponse botResponse) throws Exception {
-                        Message message = new Message();
-                        final String chatbotId = String.valueOf(botResponse.getMessage().getChatBotID());
-                        message.setSenderID(chatbotId);
-                        message.setMessageText(botResponse.getMessage().getMessage());
-                        message.setExternalID(userId);
-                        message.setChatBotID(chatbotId);
-                        message.setCreatedAt(new Date().getTime());
+                        final String chatBotID = String.
+                                valueOf(botResponse.getMessage().getChatBotID());
+                        Message message =
+                                getMessageForDB(botResponse.getMessage().getMessage(), chatBotID, dbMessage.getExternalID(), chatBotID, new Date().getTime(), "success");
                         return message;
                     }
                 }).subscribe(new Observer<Message>() {
@@ -89,12 +88,24 @@ public class ChatPresenterImpl implements ChatPresenter {
 
             }
         });
-
     }
 
     private void addMessageToChat(Message dbMessage) {
         ChatItem chatItem = getChatItemFromDbMessage(dbMessage);
         chatView.addMessage(chatItem);
+    }
+
+    private Message getMessageForDB(String messageText, String chatbotID, String externalID
+            , String senderID, long timestamp, String status) {
+        Message dbMessage = new Message();
+        dbMessage.setChatBotID(chatbotID);
+        dbMessage.setExternalID(externalID);
+        dbMessage.setMessageText(messageText);
+        dbMessage.setCreatedAt(timestamp);
+        dbMessage.setSenderID(senderID);
+
+        return dbMessage;
+
     }
 
     private ChatItem getChatItemFromDbMessage(Message dbMessage) {
