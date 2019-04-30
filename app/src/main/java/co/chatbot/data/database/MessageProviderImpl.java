@@ -33,4 +33,9 @@ public class MessageProviderImpl implements MessageProvider {
     public boolean addMessage(Message message) {
         return messageDao.insert(message) != 0;
     }
+
+    @Override
+    public void updateMessage(Message message) {
+        messageDao.update(message);
+    }
 }

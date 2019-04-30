@@ -11,4 +11,6 @@ public interface MessageProvider {
 
     boolean addMessage(Message message);
 
+    void updateMessage(Message message);
+
 }
