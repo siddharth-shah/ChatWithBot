@@ -36,13 +36,22 @@ public class ChatPresenterImpl implements ChatPresenter {
     }
 
     @Override
-    public void onSendButtonClicked(final String messageText, final String userId, final String botId) {
+    public void onSendButtonClicked(final String messageText,
+
+                                    final String userId, final String botId, boolean isConnected) {
         String status = "pending";
+
         Message dbMessage =
                 getMessageForDB(messageText, botId, userId,
                         userId, new Date().getTime(), status);
         messageProvider.addMessage(dbMessage);
-        addMessageToChat(dbMessage);
+        if (!isConnected) {
+            status = "failed";
+            dbMessage.setStatus(status);
+            messageProvider.updateMessage(dbMessage);
+            addMessageToChat(dbMessage);
+            return;
+        }
         sendMessageToServer(dbMessage);
 
     }
@@ -74,13 +83,16 @@ public class ChatPresenterImpl implements ChatPresenter {
             @Override
             public void onNext(Message message) {
                 messageProvider.addMessage(message);
+                dbMessage.setStatus("success");
+                messageProvider.updateMessage(dbMessage);
                 addMessageToChat(message);
 
             }
 
             @Override
             public void onError(Throwable e) {
-
+                dbMessage.setStatus("failed");
+                messageProvider.updateMessage(dbMessage);
             }
 
             @Override
