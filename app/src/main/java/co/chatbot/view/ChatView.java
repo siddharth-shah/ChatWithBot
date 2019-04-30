@@ -9,6 +9,6 @@ public interface ChatView {
 
     void addMessage(ChatItem chatItem);
     void showError(String errorMessage);
-
     void onInitialMessagesLoaded(List<ChatItem> messages);
+    void updateMessage(ChatItem chatItem);
 }

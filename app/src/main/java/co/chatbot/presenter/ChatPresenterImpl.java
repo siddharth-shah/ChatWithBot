@@ -88,6 +88,7 @@ public class ChatPresenterImpl implements ChatPresenter {
                 messageProvider.addMessage(message);
                 dbMessage.setStatus("success");
                 messageProvider.updateMessage(dbMessage);
+                updateMessageInChatList(dbMessage);
                 addMessageToChat(message);
 
             }
@@ -96,6 +97,7 @@ public class ChatPresenterImpl implements ChatPresenter {
             public void onError(Throwable e) {
                 dbMessage.setStatus("failed");
                 messageProvider.updateMessage(dbMessage);
+                updateMessageInChatList(dbMessage);
             }
 
             @Override
@@ -108,6 +110,10 @@ public class ChatPresenterImpl implements ChatPresenter {
     private void addMessageToChat(Message dbMessage) {
         ChatItem chatItem = getChatItemFromDbMessage(dbMessage);
         chatView.addMessage(chatItem);
+    }
+
+    private void updateMessageInChatList(Message message) {
+        chatView.updateMessage(getChatItemFromDbMessage(message));
     }
 
     private Message getMessageForDB(String messageText, String chatbotID, String externalID
@@ -126,7 +132,8 @@ public class ChatPresenterImpl implements ChatPresenter {
     }
 
     private ChatItem getChatItemFromDbMessage(Message dbMessage) {
-        return new ChatItem(dbMessage.getMessageText(), dbMessage.getSenderID());
+        return new ChatItem(dbMessage.getMessageText(), dbMessage.getSenderID()
+                , dbMessage.getCreatedAt(), dbMessage.getStatus());
     }
 
     @Override

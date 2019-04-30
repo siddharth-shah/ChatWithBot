@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
         sendButton.setOnClickListener(this);
         setUserInPreferences("siddharthshah");
         presenter.getAllMessages("siddharthshah", AppConstants.CHAT_BOT_ID);
-        presenter.retrySendingFailedMessages(AppConstants.CHAT_BOT_ID,"siddharthshah");
+        presenter.retrySendingFailedMessages(AppConstants.CHAT_BOT_ID, "siddharthshah");
     }
 
     private void setUserInPreferences(String userId) {
@@ -79,6 +79,12 @@ public class MainActivity extends AppCompatActivity implements ChatView, View.On
             chatAdapter.addMessage(chatItem);
             chatList.scrollToPosition(chatAdapter.getItemCount() - 1);
         }
+    }
+
+    @Override
+    public void updateMessage(ChatItem chatItem) {
+        chatAdapter.updateMessage(chatItem);
+
     }
 
     @Override
